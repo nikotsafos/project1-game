@@ -2,6 +2,7 @@
 var mvinterval = 10;
 var gameOver = false;
 var score = 0;
+var bombOnScreen = false;
 var snake = {
   x: 100,
   y: 100,
@@ -18,6 +19,24 @@ var food = {
   color: 'green'
   }
 
+var bomb = {
+    x: null,
+    y: null,
+    height: 10,
+    width: 10,
+    color: 'red'
+  }
+
+var highscore = localStorage.getItem("highscore");
+
+if(highscore !== null){
+    if (score > highscore) {
+        localStorage.setItem("highscore", score);
+    }
+}
+else{
+    localStorage.setItem("highscore", score);
+}
 
 var randomNum = function() {
   return Math.floor(Math.random() * 50) * 10;
@@ -25,7 +44,8 @@ var randomNum = function() {
 
 //randomly changes the location of the bomb
 var generateBomb = function() {
-  $('.bomb').css({top: randomNum(), left: randomNum()})
+  $('.bomb').css({top: bomb.y = randomNum(), left: bomb.x = randomNum()})
+  $('.bomb').css("background-color", bomb.color);
 }
 
 //randomly changes the position of the food
@@ -33,7 +53,8 @@ var generateFood = function() {
   $('.food').css({top: food.y = randomNum(), left: food.x = randomNum()})
   score += 10;
   console.log(score);
-  $('.updateScore').text('Score: ' + score);
+  $('.updateScore').text('Score: ' + score + ' Highscore: ' + highscore);
+  $('.updateScore').css('color', 'black');
 }
 
 
@@ -41,7 +62,8 @@ var generateFood = function() {
 $(document).ready(function() {
   console.log('ready');
   $(document).keydown(function(e) {
-    controlpress = e.keyCode
+    if(!gameOver) {
+      controlpress = e.keyCode
     switch (controlpress) {
       case 37:
       case 65:
@@ -55,6 +77,17 @@ $(document).ready(function() {
            snake.y < food.y + food.height &&
            snake.height + snake.y > food.y) {
              generateFood();
+             $('.snakehead').prepend("<div class='snakeBody'></div>");
+        }
+        if (snake.x < bomb.x + bomb.width &&
+           snake.x + snake.width > bomb.x &&
+           snake.y < bomb.y + bomb.height &&
+           snake.height + snake.y > bomb.y) {
+             gameOver = true;
+           }
+        if (score === 50 && !bombOnScreen) {
+          generateBomb();
+          bombOnScreen = true;
         }
           break;
       case 38:
@@ -69,6 +102,17 @@ $(document).ready(function() {
            snake.y < food.y + food.height &&
            snake.height + snake.y > food.y) {
              generateFood();
+             $('.snakehead').prepend("<div class='snakeBody'></div>");
+        }
+        if (snake.x < bomb.x + bomb.width &&
+           snake.x + snake.width > bomb.x &&
+           snake.y < bomb.y + bomb.height &&
+           snake.height + snake.y > bomb.y) {
+            gameOver = true;
+           }
+        if (score === 50 && !bombOnScreen) {
+          generateBomb();
+          bombOnScreen = true;
         }
           break;
       case 39:
@@ -83,6 +127,17 @@ $(document).ready(function() {
              snake.y < food.y + food.height &&
              snake.height + snake.y > food.y) {
                generateFood();
+               $('.snakehead').prepend("<div class='snakeBody'></div>");
+          }
+          if (snake.x < bomb.x + bomb.width &&
+             snake.x + snake.width > bomb.x &&
+             snake.y < bomb.y + bomb.height &&
+             snake.height + snake.y > bomb.y) {
+              gameOver = true;
+             }
+          if (score === 50 && !bombOnScreen) {
+            generateBomb();
+            bombOnScreen = true;
           }
           break;
       case 40:
@@ -97,21 +152,27 @@ $(document).ready(function() {
            snake.y < food.y + food.height &&
            snake.height + snake.y > food.y) {
              generateFood();
+             $('.snakehead').prepend("<div class='snakeBody'></div>");
+        }
+        if (snake.x < bomb.x + bomb.width &&
+           snake.x + snake.width > bomb.x &&
+           snake.y < bomb.y + bomb.height &&
+           snake.height + snake.y > bomb.y) {
+            gameOver = true;
+           }
+        if (score === 50 && !bombOnScreen) {
+          generateBomb();
+          bombOnScreen = true;
         }
           break;
 
     };
-  });
-  });
+  }});
+});
 
-  // if (snake.x < food.x + food.width &&
-  //    snake.x + snake.width > food.x &&
-  //    snake.y < food.y + food.height &&
-  //    snake.height + snake.y > food.y) {
-  //      generateFood();
-  // }
+$('.snakehead').prepend("<div class='snakeBody'></div>")
 
-// $('.snakehead').append("<div class='snakeBody'></div>");
+
 
   //if snakehead position equals food fposition
   //generateFood and add one to snake tail

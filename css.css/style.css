@@ -13,8 +13,19 @@ text-align: center;
   transform: none;
 }
 
-/* .bomb {
-  background-color: red;
+.updateScore {
+  color: rgba(255, 255, 255, 0);
+}
+
+.snakeBody {
+  background-color: limegreen;
+  height: 10px;
+  width: 10px;
+
+}
+
+.bomb {
+  background-color: rgba(255, 255, 255, 0);
   height: 10px;
   width: 10px;
   position: absolute;
@@ -22,7 +33,7 @@ text-align: center;
   top: 350px;
   left: 350px;
 
-} */
+}
 
 .food {
   background-color: green;
