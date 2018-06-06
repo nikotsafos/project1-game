@@ -31,6 +31,9 @@ var generateBomb = function() {
 //randomly changes the position of the food
 var generateFood = function() {
   $('.food').css({top: food.y = randomNum(), left: food.x = randomNum()})
+  score += 10;
+  console.log(score);
+  $('.updateScore').text('Score: ' + score);
 }
 
 
