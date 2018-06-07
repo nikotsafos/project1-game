@@ -1,3 +1,7 @@
+$(document).ready(function() {
+    console.log('ready');
+
+
 //players startingpostion
 var mvinterval = 10;
 var gameOver = false;
@@ -30,14 +34,15 @@ var bomb = {
 
 var highscore = localStorage.getItem("highscore");
 
-if(highscore !== null){
-    if (score > highscore) {
-        localStorage.setItem("highscore", score);
-    }
-}
-else{
-    localStorage.setItem("highscore", score);
-}
+// if(highscore !== null){
+//     if (score > highscore) {
+//         localStorage.setItem("highscore", score);
+//     }
+// }
+// else{
+//     localStorage.setItem("highscore", score);
+// }
+$('.updateScore').text('Score: ' + score + ' Highscore: ' + highscore);
 
 var randomNum = function() {
   return Math.floor(Math.random() * 50) * 10;
@@ -55,7 +60,6 @@ var generateFood = function() {
   score += 10;
   console.log(score);
   $('.updateScore').text('Score: ' + score + ' Highscore: ' + highscore);
-  $('.updateScore').css('color', 'black');
 }
 
 var checkForEat = function() {
@@ -65,8 +69,30 @@ var checkForEat = function() {
      snake.height + snake.y > food.y) {
        generateFood();
        $('.snakehead').prepend("<div class='snakeBody'></div>");
+       if (score === 50 && !bombOnScreen) {
+         generateBomb();
+         bombOnScreen = true;
+       }
   }
 }
+
+var gameReset = function() {
+  location.reload();
+  // $('.updateScore').text('Score: 0' + ' Highscore: ' + highscore);
+  // $('.updateScore').css('color', 'black');
+  // gameOver = false;
+  // bombOnScreen = false;
+  // snake.x = 100;
+  // snake.y = 100;
+  // $('.snakehead').css({top: 100, left: 100});
+  // food.x = 300;
+  // food.y = 300;
+  // score = 0;
+  // highscore = localStorage.getItem("highscore");
+  // $('.food').css({top: 300, left: 300});
+  // $('.bomb').remove();
+  // $('.snakeBody').remove();
+};
 
 
 var checkForDead = function() {
@@ -75,18 +101,23 @@ var checkForDead = function() {
      snake.y < bomb.y + bomb.height &&
      snake.height + snake.y > bomb.y) {
       gameOver = true;
+      if(highscore !== null){
+          if (score > highscore) {
+              localStorage.setItem("highscore", score);
+          }
+      }
+      else{
+          localStorage.setItem("highscore", score);
+      }
+      gameReset();
      }
-  if (score === 50 && !bombOnScreen) {
-    generateBomb();
-    bombOnScreen = true;
-  }
+
 }
 
 
 
 //changes the position of the snake based on the key you press
-$(document).ready(function() {
-  console.log('ready');
+
   $(document).keydown(function(e) {
     if(!gameOver) {
       controlpress = e.keyCode
@@ -130,16 +161,16 @@ $(document).ready(function() {
         $('.snakehead').css({top: snake.y += mvinterval, left: snake.x});
         checkForEat();
         checkForDead();
-          break;
+        break;
 
     };
   }});
-});
+
 
 $('.snakehead').prepend("<div class='snakeBody'></div>")
 
 
-
+});
 
 
   //if snakehead position equals food fposition
