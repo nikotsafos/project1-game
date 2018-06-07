@@ -3,6 +3,7 @@ var mvinterval = 10;
 var gameOver = false;
 var score = 0;
 var bombOnScreen = false;
+
 var snake = {
   x: 100,
   y: 100,
@@ -57,6 +58,31 @@ var generateFood = function() {
   $('.updateScore').css('color', 'black');
 }
 
+var checkForEat = function() {
+  if (snake.x < food.x + food.width &&
+     snake.x + snake.width > food.x &&
+     snake.y < food.y + food.height &&
+     snake.height + snake.y > food.y) {
+       generateFood();
+       $('.snakehead').prepend("<div class='snakeBody'></div>");
+  }
+}
+
+
+var checkForDead = function() {
+  if (snake.x < bomb.x + bomb.width &&
+     snake.x + snake.width > bomb.x &&
+     snake.y < bomb.y + bomb.height &&
+     snake.height + snake.y > bomb.y) {
+      gameOver = true;
+     }
+  if (score === 50 && !bombOnScreen) {
+    generateBomb();
+    bombOnScreen = true;
+  }
+}
+
+
 
 //changes the position of the snake based on the key you press
 $(document).ready(function() {
@@ -72,23 +98,8 @@ $(document).ready(function() {
           snake.x = 500;
         };
         $('.snakehead').css({top: snake.y, left: snake.x -= mvinterval});
-        if (snake.x < food.x + food.width &&
-           snake.x + snake.width > food.x &&
-           snake.y < food.y + food.height &&
-           snake.height + snake.y > food.y) {
-             generateFood();
-             $('.snakehead').prepend("<div class='snakeBody'></div>");
-        }
-        if (snake.x < bomb.x + bomb.width &&
-           snake.x + snake.width > bomb.x &&
-           snake.y < bomb.y + bomb.height &&
-           snake.height + snake.y > bomb.y) {
-             gameOver = true;
-           }
-        if (score === 50 && !bombOnScreen) {
-          generateBomb();
-          bombOnScreen = true;
-        }
+        checkForEat();
+        checkForDead();
           break;
       case 38:
       case 87:
@@ -97,23 +108,8 @@ $(document).ready(function() {
           snake.y = 500;
         };
         $('.snakehead').css({top: snake.y -= mvinterval, left: snake.x});
-        if (snake.x < food.x + food.width &&
-           snake.x + snake.width > food.x &&
-           snake.y < food.y + food.height &&
-           snake.height + snake.y > food.y) {
-             generateFood();
-             $('.snakehead').prepend("<div class='snakeBody'></div>");
-        }
-        if (snake.x < bomb.x + bomb.width &&
-           snake.x + snake.width > bomb.x &&
-           snake.y < bomb.y + bomb.height &&
-           snake.height + snake.y > bomb.y) {
-            gameOver = true;
-           }
-        if (score === 50 && !bombOnScreen) {
-          generateBomb();
-          bombOnScreen = true;
-        }
+        checkForEat();
+        checkForDead();
           break;
       case 39:
       case 68:
@@ -122,23 +118,8 @@ $(document).ready(function() {
             snake.x = -10;
           };
           $('.snakehead').css({top: snake.y, left: snake.x += mvinterval});
-          if (snake.x < food.x + food.width &&
-             snake.x + snake.width > food.x &&
-             snake.y < food.y + food.height &&
-             snake.height + snake.y > food.y) {
-               generateFood();
-               $('.snakehead').prepend("<div class='snakeBody'></div>");
-          }
-          if (snake.x < bomb.x + bomb.width &&
-             snake.x + snake.width > bomb.x &&
-             snake.y < bomb.y + bomb.height &&
-             snake.height + snake.y > bomb.y) {
-              gameOver = true;
-             }
-          if (score === 50 && !bombOnScreen) {
-            generateBomb();
-            bombOnScreen = true;
-          }
+          checkForEat();
+          checkForDead();
           break;
       case 40:
       case 83:
@@ -147,23 +128,8 @@ $(document).ready(function() {
           snake.y = -10;
         };
         $('.snakehead').css({top: snake.y += mvinterval, left: snake.x});
-        if (snake.x < food.x + food.width &&
-           snake.x + snake.width > food.x &&
-           snake.y < food.y + food.height &&
-           snake.height + snake.y > food.y) {
-             generateFood();
-             $('.snakehead').prepend("<div class='snakeBody'></div>");
-        }
-        if (snake.x < bomb.x + bomb.width &&
-           snake.x + snake.width > bomb.x &&
-           snake.y < bomb.y + bomb.height &&
-           snake.height + snake.y > bomb.y) {
-            gameOver = true;
-           }
-        if (score === 50 && !bombOnScreen) {
-          generateBomb();
-          bombOnScreen = true;
-        }
+        checkForEat();
+        checkForDead();
           break;
 
     };
@@ -174,7 +140,9 @@ $('.snakehead').prepend("<div class='snakeBody'></div>")
 
 
 
+
+
   //if snakehead position equals food fposition
   //generateFood and add one to snake tail
 
-//after 15 generate bomb and food. if snakehead position equals bomb..dead
+//after 5 generate bomb and food. if snakehead position equals bomb..dead
